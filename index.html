@@ -36,6 +36,10 @@
 
   <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+
+  <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
   <!-- All JavaScript goes inside the script tags below -->
   <script>
     // define map options
@@ -55,7 +59,45 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 20
 }).addTo(map);
 
- </script>
+
+// use jquery to load GeoJSON data
+
+
+    
+   $.getJSON("RamallahZones.json", function(RZ) {
+      L.geoJson(RZ, {
+        style: function(feature) {
+          return {
+            fillColor: "yellow",
+            fillOpacity: 0.3,
+            color: "yellow",
+            weight: 1.0,
+            opacity: 0.7
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          layer.on('click', function(e) {
+            alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
+          });
+        }
+      }).addTo(map);
+    });
+
+    $.getJSON("wasteContainer.json", function(WC) {
+      L.geoJson(WC, {
+        pointToLayer: function(feature, latlng) {
+          return L.circleMarker(latlng, {
+            radius: 5,
+            fillColor: "orange",
+            color: "orange",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+          });
+        }
+      }).addTo(map);
+    });
+  </script>
 </body>
 
 </html>
