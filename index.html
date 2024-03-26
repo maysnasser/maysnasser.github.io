@@ -27,8 +27,8 @@
       maxZoom: 20
     }).addTo(map);
 
-    // Load and display Libraries from the updated Libraries.json
-    $.getJSON("/mnt/data/Libraries.json", function(data) {
+    // Load and display Libraries from GitHub
+    $.getJSON("https://maysnasser.github.io/Libraries.json", function(data) {
       L.geoJson(data, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
@@ -44,6 +44,20 @@
           if (feature.properties && feature.properties.BUSNIESS_1) {
             layer.bindPopup(feature.properties.BUSNIESS_1); // Displaying the English name of the library
           }
+        }
+      }).addTo(map);
+    });
+
+    // Load and display Ramallah Zones from GitHub
+    $.getJSON("https://maysnasser.github.io/RamallahZones.json", function(data) {
+      L.geoJson(data, {
+        style: function(feature) {
+          return {
+            color: "#1E90FF", // Deep sky blue for zones boundaries
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0 // Transparent zones
+          };
         }
       }).addTo(map);
     });
