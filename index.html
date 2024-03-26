@@ -38,7 +38,16 @@
             weight: 2, // سمك الحدود
             opacity: 1,
             fillOpacity: 0.8
-   
+          });
+        },
+        onEachFeature: function(feature, layer) {
+          if (feature.properties && feature.properties.NAME_ENGLI) {
+            layer.bindPopup(feature.properties.NAME_ENGLI); // عرض اسم المكتبة بالإنجليزية عند النقر
+            layer.bindTooltip(feature.properties.NAME_ENGLI, { permanent: true, direction: "top", className: "library-label" }).openTooltip(); // عرض اسم المكتبة عند التحويم
+          }
+        }
+      }).addTo(map);
+    });
 
     // Load and display Ramallah Zones from GitHub
     $.getJSON("https://maysnasser.github.io/RamallahZones.json", function(data) {
