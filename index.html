@@ -16,7 +16,7 @@
   <script>
     const mapOptions = {
       zoomSnap: 0.5,
-      center: [31.904804166870857, 35.20132345423534], // Coordinates of the Scientific Supplies Center & Lab Co.
+      center: [31.904804166870857, 35.20132345423534], // Coordinates of "Scientific Supplies Center & Lab Co."
       zoom: 14,
     };
 
@@ -32,17 +32,18 @@
       L.geoJson(data, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
-            radius: 8,
-            fillColor: "#FF6347", // Tomato color for libraries
-            color: "#000",
-            weight: 1,
+            radius: 6, // تقليص حجم النقاط
+            fillColor: "#FF69B4", // وردي
+            color: "#800000", // بني غامق
+            weight: 2, // سمك الحدود
             opacity: 1,
             fillOpacity: 0.8
           });
         },
         onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.BUSNIESS_1) {
-            layer.bindPopup(feature.properties.BUSNIESS_1); // Displaying the English name of the library
+          if (feature.properties && feature.properties.NAME_ENGLI) {
+            layer.bindPopup(feature.properties.NAME_ENGLI); // عرض اسم المكتبة بالإنجليزية عند النقر
+            layer.bindTooltip(feature.properties.NAME_ENGLI, { permanent: true, direction: "top", className: "library-label" }).openTooltip(); // عرض اسم المكتبة عند التحويم
           }
         }
       }).addTo(map);
@@ -53,10 +54,10 @@
       L.geoJson(data, {
         style: function(feature) {
           return {
-            color: "#1E90FF", // Deep sky blue for zones boundaries
-            weight: 2,
+            color: "#5D4037", // بني غامق
+            weight: 3, // سمك الحدود
             opacity: 1,
-            fillOpacity: 0 // Transparent zones
+            fillOpacity: 0 // المنطقة شفافة
           };
         }
       }).addTo(map);
