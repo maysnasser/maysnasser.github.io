@@ -1,70 +1,3 @@
-<<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Ramallah Libraries</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-  <style>
-    body { margin: 0; height: 100%; width: 100%; }
-    #map { position: absolute; width: 100%; top: 0; bottom: 0; }
-  </style>
-</head>
-<body>
-  <div id="map"></div>
-  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script>
-    const mapOptions = {
-      zoomSnap: 0.5,
-      center: [31.903764, 35.203418], // Coordinates of the Scientific Equipment and Laboratory Library
-      zoom: 14,
-    };
-
-    const map = L.map("map", mapOptions);
-
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-      maxZoom: 18
-    }).addTo(map);
-
-    // Load and display Ramallah Zones
-    $.getJSON("path/to/your/RamallahZones.geojson", function(data) {
-      L.geoJson(data, {
-        style: function(feature) {
-          return {
-            color: "#ffcc00", // Bright yellow for zones boundaries
-            weight: 2,
-            opacity: 1,
-            fillOpacity: 0 // Transparent zones
-          };
-        }
-      }).addTo(map);
-    });
-
-    // Load and display Libraries
-    $.getJSON("path/to/your/Libraries.geojson", function(data) {
-      L.geoJson(data, {
-        pointToLayer: function(feature, latlng) {
-          return L.circleMarker(latlng, {
-            radius: 8,
-            fillColor: "#00ff00", // Bright green for libraries
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-          });
-        },
-        onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.NAME_EN) {
-            layer.bindPopup(feature.properties.NAME_EN); // Ensure the property matches your data
-          }
-        }
-      }).addTo(map);
-    });
-  </script>
-</body>
-</html>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,8 +5,8 @@
   <title>Ramallah Libraries</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
   <style>
-    body { margin: 0; height: 100%; width: 100%; }
-    #map { position: absolute; width: 100%; top: 0; bottom: 0; }
+    body { margin: 0px; height: 100%; width: 100%; }
+    #map { position: absolute; width: 100%; top: 0px; bottom: 0; }
   </style>
 </head>
 <body>
@@ -83,7 +16,7 @@
   <script>
     const mapOptions = {
       zoomSnap: 0.5,
-      center: [31.903764, 35.203418], // Coordinates of the Scientific Equipment and Laboratory Library
+      center: [31.904804166870857, 35.20132345423534], // Coordinates of the Scientific Supplies Center & Lab Co.
       zoom: 14,
     };
 
@@ -91,30 +24,16 @@
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-      maxZoom: 18
+      maxZoom: 20
     }).addTo(map);
 
-    // Load and display Ramallah Zones
-    $.getJSON("path/to/your/RamallahZones.geojson", function(data) {
-      L.geoJson(data, {
-        style: function(feature) {
-          return {
-            color: "#ffcc00", // Bright yellow for zones boundaries
-            weight: 2,
-            opacity: 1,
-            fillOpacity: 0 // Transparent zones
-          };
-        }
-      }).addTo(map);
-    });
-
-    // Load and display Libraries
-    $.getJSON("path/to/your/Libraries.geojson", function(data) {
+    // Load and display Libraries from the updated Libraries.json
+    $.getJSON("/mnt/data/Libraries.json", function(data) {
       L.geoJson(data, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
             radius: 8,
-            fillColor: "#00ff00", // Bright green for libraries
+            fillColor: "#FF6347", // Tomato color for libraries
             color: "#000",
             weight: 1,
             opacity: 1,
@@ -122,8 +41,8 @@
           });
         },
         onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.NAME_EN) {
-            layer.bindPopup(feature.properties.NAME_EN); // Ensure the property matches your data
+          if (feature.properties && feature.properties.BUSNIESS_1) {
+            layer.bindPopup(feature.properties.BUSNIESS_1); // Displaying the English name of the library
           }
         }
       }).addTo(map);
