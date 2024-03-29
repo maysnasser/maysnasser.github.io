@@ -35,8 +35,8 @@
       maxZoom: 20
     }).addTo(map);
 
-    // Load and display libraries with purple markers
-    $.getJSON("Libraries.json", function(data) {
+    // Load and display libraries with purple markers from a specific URL
+    $.getJSON("https://maysnasser.github.io/Libraries.json", function(data) { // Update this URL to the correct path where your GeoJSON file is hosted
       L.geoJson(data, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
