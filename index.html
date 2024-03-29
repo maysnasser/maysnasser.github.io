@@ -35,22 +35,44 @@
       maxZoom: 20
     }).addTo(map);
 
-    // Load and display libraries with purple markers from a specific URL
-    $.getJSON("https://maysnasser.github.io/Libraries.json", function(data) { // Update this URL to the correct path where your GeoJSON file is hosted
-      L.geoJson(data, {
+    let librariesLayer;
+
+    // Load and display libraries with purple markers
+    $.getJSON("Libraries.json", function(data) {
+      librariesLayer = L.geoJson(data, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
             radius: 6,
-            fillColor: "purple", // Purple color for libraries
-            color: "lightbrown", // Light brown color for borders
+            fillColor: "purple",
+            color: "purple",
             weight: 1,
             opacity: 1,
             fillOpacity: 0.8
           });
         },
         onEachFeature: function(feature, layer) {
-          // Display the library's name in English on click
           layer.bindPopup(feature.properties.BUSNIESS_1);
+        }
+      }).addTo(map);
+    });
+
+    // Load and display zones with light brown borders that contain libraries
+    $.getJSON("RamallahZones.json", function(zonesData) {
+      L.geoJson(zonesData, {
+        style: function(feature) {
+          return {
+            color: "lightbrown", // Light brown borders for zones
+            weight: 1,
+            opacity: 0.5,
+            fillOpacity: 0
+          };
+        },
+        filter: function(feature) {
+          // Only display zones that contain a library
+          return librariesLayer.toGeoJSON().features.some(library => {
+            const poly = L.polygon(feature.geometry.coordinates);
+            return poly.getBounds().contains(library.geometry.coordinates);
+          });
         }
       }).addTo(map);
     });
