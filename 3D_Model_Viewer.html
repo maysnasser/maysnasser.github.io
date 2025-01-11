@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .gallery-container {
+            width: 80%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        .lightbox .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+        .lightbox .prev,
+        .lightbox .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 36px;
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+        }
+        .lightbox .prev {
+            left: 20px;
+        }
+        .lightbox .next {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <!-- صور المعرض -->
+        <div class="gallery-item">
+            <img src="https://maysnasser.github.io/Screenshot%202025-01-10%20172618.png" alt="Image 1">
+        </div>
+        <div class="gallery-item">
+            <img src="https://maysnasser.github.io/Screenshot%202025-01-10%20172519.png" alt="Image 2">
+        </div>
+        <div class="gallery-item">
+            <img src="https://maysnasser.github.io/Screenshot%202025-01-10%20172440.png" alt="Image 3">
+        </div>
+        <div class="gallery-item">
+            <img src="https://maysnasser.github.io/Screenshot%202025-01-10%20172316.png" alt="Image 4">
+        </div>
+    </div>
+
+    <!-- نافذة التكبير (Lightbox) -->
+    <div class="lightbox" id="lightbox">
+        <span class="close" id="close">&times;</span>
+        <span class="prev" id="prev">&lt;</span>
+        <span class="next" id="next">&gt;</span>
+        <img id="lightbox-img" src="" alt="Lightbox Image">
+    </div>
+
+    <script>
+        const galleryItems = document.querySelectorAll('.gallery-item img');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeBtn = document.getElementById('close');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        let currentIndex = 0;
+
+        // فتح نافذة التكبير
+        function openLightbox(index) {
+            currentIndex = index;
+            lightboxImg.src = galleryItems[index].src;
+            lightbox.style.display = 'flex';
+        }
+
+        // غلق نافذة التكبير
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+        }
+
+        // الانتقال إلى الصورة السابقة
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+            lightboxImg.src = galleryItems[currentIndex].src;
+        }
+
+        // الانتقال إلى الصورة التالية
+        function showNext() {
+            currentIndex = (currentIndex + 1) % galleryItems.length;
+            lightboxImg.src = galleryItems[currentIndex].src;
+        }
+
+        // إضافة الأحداث
+        galleryItems.forEach((img, index) => {
+            img.addEventListener('click', () => openLightbox(index));
+        });
+        closeBtn.addEventListener('click', closeLightbox);
+        prevBtn.addEventListener('click', showPrev);
+        nextBtn.addEventListener('click', showNext);
+    </script>
+</body>
+</html>
